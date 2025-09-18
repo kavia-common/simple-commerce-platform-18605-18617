@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { checkoutOrder } from '../api/hooks';
+import { api } from '../api/client';
 import { useNavigate } from 'react-router-dom';
 
 // PUBLIC_INTERFACE
@@ -24,12 +25,24 @@ export default function CheckoutPage() {
     setLoading(true);
     setError('');
     try {
-      // Placeholder payload; backend can map address objects or IDs as needed.
-      const payload = { shipping, billing: billingSame ? shipping : shipping, payment_method: 'placeholder' };
-      const order = await checkoutOrder(payload);
+      // 1) Create shipping address
+      const shipRes = await api.post('/addresses/', { ...shipping, address_type: 'shipping', is_default: true });
+      const shippingId = shipRes.data?.id;
+
+      // 2) Create billing (same as shipping or separate - for simplicity reuse shipping)
+      const billingData = billingSame ? shipping : shipping; // extend to a separate form if needed
+      const billRes = await api.post('/addresses/', { ...billingData, address_type: 'billing', is_default: true });
+      const billingId = billRes.data?.id;
+
+      if (!shippingId || !billingId) {
+        throw new Error('Failed to create addresses for checkout.');
+      }
+
+      // 3) Checkout with required IDs
+      await checkoutOrder({ shipping_address_id: shippingId, billing_address_id: billingId });
       navigate('/orders');
     } catch (err) {
-      setError(err?.message || 'Checkout failed');
+      setError(err?.response?.data?.detail || err?.message || 'Checkout failed');
     } finally {
       setLoading(false);
     }

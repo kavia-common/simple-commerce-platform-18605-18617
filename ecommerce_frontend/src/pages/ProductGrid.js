@@ -39,7 +39,11 @@ export default function ProductGrid() {
     })();
   }, []);
 
-  const filtered = results.filter(p => (categoryId ? p.category_id === Number(categoryId) : true));
+  const filtered = results.filter(p => {
+    if (!categoryId) return true;
+    const pid = p?.category?.id;
+    return Number(pid) === Number(categoryId);
+  });
 
   return (
     <div className="section">

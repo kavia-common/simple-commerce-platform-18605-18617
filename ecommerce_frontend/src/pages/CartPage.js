@@ -8,7 +8,7 @@ export default function CartPage() {
   const navigate = useNavigate();
 
   const items = cart?.items || [];
-  const total = cart?.total || 0;
+  const total = cart?.subtotal || 0;
 
   return (
     <div className="section">

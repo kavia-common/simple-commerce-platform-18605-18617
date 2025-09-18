@@ -8,14 +8,33 @@ const CartContext = createContext(null);
  * CartProvider wraps the app to provide cart data and actions.
  */
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState({ items: [], total: 0 });
+  const [cart, setCart] = useState({ items: [], subtotal: 0 });
   const [loading, setLoading] = useState(false);
+
+  // Map backend CartSerializer shape into UI-friendly shape
+  const normalizeCart = (data) => {
+    const items = Array.isArray(data?.items) ? data.items.map((it) => {
+      // it.product is nested Product; it.line_total is provided as string
+      const p = it.product || {};
+      return {
+        product_id: p.id,
+        product_name: p.name,
+        price: p.price,
+        currency: p.currency || 'USD',
+        quantity: it.quantity,
+        image_url: p.image_url || '',
+        line_total: Number(it.line_total || 0),
+      };
+    }) : [];
+    const subtotal = Number(data?.subtotal || items.reduce((s, i) => s + (Number(i.price) * Number(i.quantity)), 0));
+    return { items, subtotal };
+  };
 
   const refresh = async () => {
     setLoading(true);
     try {
       const data = await getCart();
-      setCart(data);
+      setCart(normalizeCart(data));
     } finally {
       setLoading(false);
     }
