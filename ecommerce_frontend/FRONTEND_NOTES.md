@@ -11,6 +11,8 @@ This React app implements a simple eCommerce UI:
 
 Configuration:
 - Set REACT_APP_API_BASE to your backend API base (e.g., http://localhost:8000/api)
+  - When the React app is served by Django on the same domain, you can set REACT_APP_API_BASE="/api" (default).
+  - Ensure backend has a catch-all SPA fallback and serves the built assets to avoid 404 on refresh.
 - Optional Supabase placeholders:
   - REACT_APP_SUPABASE_URL, REACT_APP_SUPABASE_ANON_KEY, REACT_APP_SITE_URL
 
