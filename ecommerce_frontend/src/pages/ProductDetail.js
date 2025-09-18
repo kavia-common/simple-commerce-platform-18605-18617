@@ -3,7 +3,10 @@ import { getProduct } from '../api/hooks';
 import { useParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * Product detail page with Ocean polish and responsive layout.
+ */
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -26,21 +29,23 @@ export default function ProductDetail() {
   if (!product) return <div className="helper">Product not found</div>;
 
   return (
-    <div className="section">
-      <div className="card" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, padding: 18 }}>
+    <div className="card">
+      <div className="card-body" style={{ display: 'grid', gap: 18, gridTemplateColumns: '1fr 1fr' }}>
         <img
           src={product.image_url || 'https://picsum.photos/seed/detail' + product.id + '/800/600'}
           alt={product.name}
           className="product-image"
-          style={{ height: 320, borderRadius: 12 }}
+          style={{ height: 360, borderRadius: 12 }}
         />
         <div style={{ display: 'grid', gap: 10 }}>
-          <div className="title" style={{ fontSize: 24 }}>{product.name}</div>
+          <div className="title" style={{ fontSize: 26 }}>{product.name}</div>
           <div className="helper">{product.category?.name || ''}</div>
-          <div className="price" style={{ fontSize: 20 }}>{product.currency || '$'} {product.price}</div>
+          <div className="price" style={{ fontSize: 22 }}>{product.currency || '$'} {product.price}</div>
           <div className="helper">{product.description}</div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <label className="label" htmlFor="qty" style={{ margin: 0 }}>Qty</label>
             <input
+              id="qty"
               className="input"
               type="number"
               value={qty}

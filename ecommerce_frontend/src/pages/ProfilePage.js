@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { meApi } from '../api/hooks';
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * Profile page with Ocean styling.
+ */
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
 
@@ -19,12 +22,17 @@ export default function ProfilePage() {
   if (!user) return <div className="helper">Please login to view your profile.</div>;
 
   return (
-    <div className="section">
-      <div className="title" style={{ fontSize: 22 }}>Your Profile</div>
-      <div className="card" style={{ padding: 16 }}>
-        <div><strong>Username:</strong> {user.username}</div>
-        {user.email && <div><strong>Email:</strong> {user.email}</div>}
+    <>
+      <div className="page-heading">
+        <h2 className="h1">Your Profile</h2>
+        <span className="subtitle">Manage your account</span>
       </div>
-    </div>
+      <div className="card">
+        <div className="card-body" style={{ display: 'grid', gap: 8 }}>
+          <div><strong>Username:</strong> {user.username}</div>
+          {user.email && <div><strong>Email:</strong> {user.email}</div>}
+        </div>
+      </div>
+    </>
   );
 }

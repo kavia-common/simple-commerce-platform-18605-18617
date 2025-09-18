@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * Ocean-styled signup page.
+ */
 export default function SignupPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -18,17 +21,30 @@ export default function SignupPage() {
 
   return (
     <div className="section" style={{ maxWidth: 420, margin: '0 auto' }}>
-      <div className="card" style={{ padding: 18 }}>
-        <div className="title" style={{ textAlign: 'center' }}>Create an account</div>
-        {msg && <div className="helper" style={{ color: 'var(--primary)' }}>{msg}</div>}
-        <form className="form" onSubmit={submit}>
-          <input className="input" placeholder="Username" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} required />
-          <input className="input" placeholder="Email (optional)" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
-          <input className="input" placeholder="Password (min 8)" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required />
-          <button className="btn btn-primary" type="submit">Sign Up</button>
-        </form>
-        <div className="helper" style={{ marginTop: 8 }}>
-          Already have an account? <Link to="/login">Log in</Link>
+      <div className="card">
+        <div className="card-body">
+          <div className="page-heading" style={{ marginBottom: 8 }}>
+            <h2 className="h1" style={{ fontSize: 24 }}>Create an account</h2>
+          </div>
+          {msg && <div className="helper ok mb-3">{msg}</div>}
+          <form className="form" onSubmit={submit}>
+            <div>
+              <label className="label" htmlFor="s-username">Username</label>
+              <input id="s-username" className="input" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} required />
+            </div>
+            <div>
+              <label className="label" htmlFor="s-email">Email (optional)</label>
+              <input id="s-email" className="input" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
+            </div>
+            <div>
+              <label className="label" htmlFor="s-password">Password (min 8)</label>
+              <input id="s-password" className="input" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required />
+            </div>
+            <button className="btn btn-primary" type="submit">Sign Up</button>
+          </form>
+          <div className="helper mt-3">
+            Already have an account? <Link to="/login">Log in</Link>
+          </div>
         </div>
       </div>
     </div>

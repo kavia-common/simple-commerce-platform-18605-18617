@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 function ProductCard({ product, onAdd }) {
   return (
-    <div className="card product-card">
+    <div className="card product-card" role="article" aria-label={product.name}>
       <img
         src={product.image_url || 'https://picsum.photos/seed/' + product.id + '/600/400'}
         alt={product.name}
@@ -24,7 +24,10 @@ function ProductCard({ product, onAdd }) {
   );
 }
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * Product list page with search and category filter, styled per Ocean Professional.
+ */
 export default function ProductGrid() {
   const [q, setQ] = useState('');
   const [categoryId, setCategoryId] = useState('');
@@ -46,35 +49,47 @@ export default function ProductGrid() {
   });
 
   return (
-    <div className="section">
-      <div className="card" style={{ padding: 16 }}>
-        <div style={{ display: 'grid', gap: 10, gridTemplateColumns: '1fr 220px 120px' }}>
-          <input
-            className="input"
-            placeholder="Search products..."
-            value={q}
-            onChange={e => setQ(e.target.value)}
-          />
-          <select
-            className="select"
-            value={categoryId}
-            onChange={e => setCategoryId(e.target.value)}
-          >
-            <option value="">All categories</option>
-            {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-          </select>
-          <button className="btn" onClick={reload}>Refresh</button>
+    <>
+      <div className="card mb-4">
+        <div className="card-body">
+          <div className="stack-sm">
+            <div>
+              <label className="label" htmlFor="search">Search</label>
+              <input
+                id="search"
+                className="input"
+                placeholder="Search products..."
+                value={q}
+                onChange={e => setQ(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="label" htmlFor="category">Category</label>
+              <select
+                id="category"
+                className="select"
+                value={categoryId}
+                onChange={e => setCategoryId(e.target.value)}
+              >
+                <option value="">All categories</option>
+                {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="mt-3">
+            <button className="btn" onClick={reload} aria-label="Refresh products">Refresh</button>
+          </div>
         </div>
       </div>
 
       {loading && <div className="helper">Loading products...</div>}
-      {error && <div className="helper" style={{ color: 'var(--error)' }}>{error}</div>}
+      {error && <div className="helper error">{error}</div>}
 
       <div className="grid">
         {filtered.map(p => (
           <ProductCard key={p.id} product={p} onAdd={addItem} />
         ))}
       </div>
-    </div>
+    </>
   );
 }
